@@ -24,7 +24,7 @@ python train.py \
 In the below image, the left one is the prediction and the right one is human labeled.
 <img src="./img001.png" alt="Image_1"/>
 
-In the following 2 graphs shown the orange line shows the evaluation metrics and the blue line shows training metrics.
+In these graphs, the orange line shows the evaluation metrics and the blue line shows training metrics.
 <img src="./img002.png" alt="Image_2"/>
 
 <img src="./img003.png" alt="Image_3"/>
