@@ -1,7 +1,7 @@
 import os, time, datetime
 import tensorflow as tf
 import nibabel as nib
-from model import build_model
+from models import get_model, list_available_models
 
 flags = tf.compat.v1.flags
 FLAGS = flags.FLAGS
@@ -13,10 +13,13 @@ flags.DEFINE_string('my_dataset_dir', None,
                     'Directory in which the dataset files are stored')
 flags.DEFINE_string('my_log_dir', None,
                     'Directory in which tensorboard log files are stored')
+flags.DEFINE_string('model_name', 'unet',
+                    f'Model architecture to use. Available: {list_available_models()}')
 
 batch_size = FLAGS.batch_size
 my_dataset_dir = FLAGS.my_dataset_dir
 my_log_dir = FLAGS.my_log_dir
+model_name = FLAGS.model_name
 
 #Loading and Slicing Data
 train_set = tf.transpose(tf.expand_dims(tf.cast(nib.load(os.path.join(my_dataset_dir, 'tr_im.nii')).get_fdata()/1000.0, tf.float32), axis=0), [3,1,2,0]) #100 512 512 1
@@ -42,8 +45,12 @@ freqs = tf.math.divide(median, freqs) #Frequencies of all label occurences for c
 def main(unused_argv):
 
     #Initialiazing model and optimizer
-    final_model = build_model()
+    print(f"Loading {model_name} model...")
+    final_model = get_model(model_name, input_shape=(512, 512, 1), num_classes=4)
     final_optimizer = tf.keras.optimizers.Adam(learning_rate=0.00003)
+    
+    # Print model summary
+    final_model.summary()
 
     #Initializing Metrics and Display parameters
     train_loss = tf.keras.metrics.Mean('train_loss', dtype=tf.float32)

@@ -12,11 +12,31 @@ This being my first full fledged project in this domain of computer vision AI, I
 Images of the dataset used in this work is a collection of the Italian Society of Medical and Interventional Radiology and can be found [here](http://medicalsegmentation.com/covid19/)
 
 **TRAINING :**
+
+The repository now supports multiple segmentation architectures:
+- **UNet** (default): The original U-Net architecture with skip connections
+- **SegNet**: A deep encoder-decoder architecture with pooling indices
+- **DeepLabV3+**: State-of-the-art architecture with atrous convolutions and ASPP
+
+To train with a specific model:
 ```
 python train.py \
---batch_size = 2 \
---my_dataset_dir = ${path to dataset directory} \
---my_log_dir = ${path to tensorboard log directory}
+--batch_size=2 \
+--my_dataset_dir=${path to dataset directory} \
+--my_log_dir=${path to tensorboard log directory} \
+--model_name=unet  # Options: unet, segnet, deeplabv3plus
+```
+
+Example commands:
+```bash
+# Train with UNet (default)
+python train.py --batch_size=2 --my_dataset_dir=./data --my_log_dir=./logs
+
+# Train with SegNet
+python train.py --batch_size=2 --my_dataset_dir=./data --my_log_dir=./logs --model_name=segnet
+
+# Train with DeepLabV3+
+python train.py --batch_size=2 --my_dataset_dir=./data --my_log_dir=./logs --model_name=deeplabv3plus
 ```
 
 **RESULTS :**
